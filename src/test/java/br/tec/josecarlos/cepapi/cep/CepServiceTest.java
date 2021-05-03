@@ -48,6 +48,20 @@ class CepServiceTest {
     }
 
     @Test
+    public void getAllPossibleCeps_shouldReturnAllPossibleCeps_whenReceiveValidCepStartedWith0() {
+        Set<String> allPossibleCeps = cepService.getAllPossibleCeps("01234567");
+
+        assertEquals(8, allPossibleCeps.size());
+        assertTrue(allPossibleCeps.contains("01234567"));
+        assertTrue(allPossibleCeps.contains("01234560"));
+        assertTrue(allPossibleCeps.contains("01234500"));
+        assertTrue(allPossibleCeps.contains("01234000"));
+        assertTrue(allPossibleCeps.contains("01230000"));
+        assertTrue(allPossibleCeps.contains("01200000"));
+        assertTrue(allPossibleCeps.contains("01000000"));
+    }
+
+    @Test
     public void getAllPossibleCeps_shouldFastFailed_whenInvalidCep() {
         assertThrows(ResponseStatusException.class, () -> cepService.find(null));
         assertThrows(ResponseStatusException.class, () -> cepService.find(""));
