@@ -16,10 +16,14 @@ public class CepService {
     @Autowired
     private CepRepository cepRepository;
 
-    public Cep find(String cep) {
-        return cepRepository
+    public Cep find(final String cep) {
+        Cep cepFound = cepRepository
                 .findFirstByCepInOrderByCepDesc(getAllPossibleCeps(cep))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("This CEP %s was not found", cep)));
+
+        log.info("For CEP '{}' it was returned: {}", cep, cepFound);
+
+        return cepFound;
     }
 
     public Set<String> getAllPossibleCeps(String cep) {
@@ -40,6 +44,7 @@ public class CepService {
 
     private void isValidCep(String cep) {
         if (cep == null || !cep.matches("^\\d{8}$")) {
+            log.warn("CEP '{}' is not valid", cep);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cep is not valid");
         }
     }
