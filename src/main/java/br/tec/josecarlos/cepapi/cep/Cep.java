@@ -2,6 +2,7 @@ package br.tec.josecarlos.cepapi.cep;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class Cep {
 
     @Id
+    @Type(type="uuid-char")
     private UUID id = UUID.randomUUID();
 
     @Column(unique = true)
