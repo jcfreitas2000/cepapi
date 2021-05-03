@@ -65,6 +65,24 @@ class CepRepositoryTest {
         assertTrue(containsCep(cepList, "10000000"));
     }
 
+    @Test
+    public void findFirstByCepInOrderByCepDesc_shouldReturnFirstCepSortedDesc() {
+        Optional<Cep> cep = cepRepository.findFirstByCepInOrderByCepDesc(
+                Stream.of(
+                        "12345671",
+                        "12345670",
+                        "12345600",
+                        "12345000",
+                        "12340000",
+                        "12300000",
+                        "12000000",
+                        "10000000"
+                ).collect(Collectors.toSet())
+        );
+
+        assertEquals("12345670", cep.orElseThrow().getCep());
+    }
+
     private boolean containsCep(List<Cep> cepList, final String cepNumber) {
         return cepList.stream().filter(cep -> cep.getCep().equals(cepNumber)).count() == 1;
     }
