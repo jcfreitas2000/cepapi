@@ -26,7 +26,7 @@ class CepControllerTest {
     private CepService cepService;
 
     @Test
-    public void find_shouldReturnCep() throws Exception {
+    public void find_shouldReturnCep_whenValidCep() throws Exception {
         Cep genericCep = CepBuilder.createGeneric();
         when(cepService.find(anyString())).thenReturn(genericCep);
 
@@ -41,11 +41,19 @@ class CepControllerTest {
 
     @Test
     public void find_shouldReturn404_whenNotFoundCep() throws Exception {
-        final HttpStatus notFound = HttpStatus.NOT_FOUND;
         Cep genericCep = CepBuilder.createGeneric();
-        when(cepService.find(anyString())).thenThrow(new ResponseStatusException(notFound));
+        when(cepService.find(anyString())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         mockMvc.perform(get(String.format("/cep/%s", genericCep.getCep())))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void find_shouldReturn400_whenInvalidCep() throws Exception {
+        Cep genericCep = CepBuilder.createGeneric();
+        when(cepService.find(anyString())).thenThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST));
+
+        mockMvc.perform(get(String.format("/cep/%s", genericCep.getCep())))
+                .andExpect(status().isBadRequest());
     }
 }
